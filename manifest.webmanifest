@@ -1,0 +1,11 @@
+{
+  "name": "Big Text Display",
+  "short_name": "Big Text",
+  "description": "An offline, full-screen large text display.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#090909",
+  "orientation": "any",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#090909" />
+    <meta name="description" content="Turn your device into a large offline text display." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Big Text Display</title>
+  </head>
+  <body>
+    <main id="app">
+      <section class="editor" aria-label="Text display controls">
+        <header>
+          <div>
+            <p class="eyebrow">OFFLINE DISPLAY</p>
+            <h1>Big Text</h1>
+          </div>
+          <button id="installButton" class="install" type="button" hidden>Install app</button>
+        </header>
+
+        <label class="input-label" for="message">Your message</label>
+        <textarea id="message" rows="4" placeholder="Type anything…" autofocus></textarea>
+
+        <fieldset class="swatches">
+          <legend>Text colour</legend>
+          <label><input type="radio" name="colour" value="white" checked><span class="swatch white"></span>White</label>
+          <label><input type="radio" name="colour" value="green"><span class="swatch green"></span>Neon green</label>
+          <label><input type="radio" name="colour" value="yellow"><span class="swatch yellow"></span>Yellow</label>
+          <label><input type="radio" name="colour" value="red"><span class="swatch red"></span>Red</label>
+        </fieldset>
+
+        <label class="toggle"><input id="invert" type="checkbox"><span></span>Invert display</label>
+        <button id="showButton" class="show" type="button">Show full screen</button>
+        <p class="hint">Tap the display to return to editing.</p>
+      </section>
+
+      <section id="display" class="display" aria-label="Full-screen text display" tabindex="0">
+        <div id="displayText" class="display-text">Type a message to begin</div>
+        <div class="display-tip">Tap anywhere to edit</div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
