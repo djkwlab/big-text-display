@@ -1,6 +1,6 @@
 const message = document.querySelector('#message');
 const presetMessages = document.querySelector('#presetMessages');
-const presetMessageButtons = [...presetMessages.querySelectorAll('button')];
+const saveMessageButton = document.querySelector('#saveMessageButton');
 const display = document.querySelector('#display');
 const displayText = document.querySelector('#displayText');
 const showButton = document.querySelector('#showButton');
@@ -21,6 +21,14 @@ let installPrompt;
 
 const colours = { white: '#ffffff', green: '#9dff00', yellow: '#ffe600', red: '#ff3131' };
 const state = JSON.parse(localStorage.getItem('big-text-state') || '{}');
+const defaultMessages = [...presetMessages.querySelectorAll('[data-message]')].map(button => button.dataset.message);
+let customMessages = [];
+try {
+  const savedMessages = JSON.parse(localStorage.getItem('big-text-custom-messages') || '[]');
+  customMessages = Array.isArray(savedMessages) ? [...new Set(savedMessages.filter(message => typeof message === 'string' && message.trim()))] : [];
+} catch {
+  customMessages = [];
+}
 const sharedMessage = new URLSearchParams(window.location.search).get('message');
 message.value = sharedMessage ?? (state.message || '');
 invert.checked = Boolean(state.invert);
@@ -29,8 +37,20 @@ const savedRgb = Array.isArray(state.customRgb) && state.customRgb.length === 3 
 rgbInputs.forEach((input, index) => { input.value = savedRgb[index]; });
 
 function currentColour() { return document.querySelector('[name="colour"]:checked').value; }
+function renderCustomMessages() {
+  presetMessages.querySelectorAll('[data-custom-message]').forEach(button => button.remove());
+  customMessages.forEach(savedMessage => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.message = savedMessage;
+    button.dataset.customMessage = 'true';
+    button.textContent = savedMessage;
+    button.title = savedMessage;
+    presetMessages.insertBefore(button, saveMessageButton);
+  });
+}
 function updatePresetMessages() {
-  presetMessageButtons.forEach(button => {
+  presetMessages.querySelectorAll('[data-message]').forEach(button => {
     const selected = button.dataset.message === message.value;
     button.classList.toggle('selected', selected);
     button.setAttribute('aria-pressed', selected);
@@ -86,6 +106,20 @@ message.addEventListener('input', () => {
   updateDisplay();
 });
 presetMessages.addEventListener('click', event => {
+  if (event.target === saveMessageButton) {
+    const currentMessage = message.value.trim();
+    if (!currentMessage) {
+      message.focus();
+      return;
+    }
+    if (!defaultMessages.includes(currentMessage) && !customMessages.includes(currentMessage)) {
+      customMessages.push(currentMessage);
+      localStorage.setItem('big-text-custom-messages', JSON.stringify(customMessages));
+      renderCustomMessages();
+    }
+    updatePresetMessages();
+    return;
+  }
   const button = event.target.closest('button[data-message]');
   if (!button) return;
   message.value = button.dataset.message;
@@ -142,6 +176,7 @@ document.addEventListener('keydown', event => { if (event.key === 'Escape') clos
 window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); installPrompt = event; installButton.hidden = false; });
 installButton.addEventListener('click', async () => { if (!installPrompt) return; installPrompt.prompt(); await installPrompt.userChoice; installPrompt = null; installButton.hidden = true; });
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
+renderCustomMessages();
 updatePresetMessages();
 updateDisplay();
 if (sharedMessage) {
