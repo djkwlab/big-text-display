@@ -49,7 +49,8 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #b8ff2c22; }
 .share { display: block; width: 100%; margin-top: 10px; padding: 13px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 14px; font-weight: 800; font-size: .95rem; }
 .share:hover, .share:focus-visible { border-color: var(--ink); outline: none; }
 .share-status { min-height: 1.2em; margin: 8px 0 -8px; color: var(--muted); font-size: .8rem; text-align: center; }
-.hint { margin: 13px 0 0; color: var(--muted); font-size: .78rem; text-align: center; }
+.coffee { display: block; width: fit-content; margin: 22px auto 0; color: var(--accent); font-size: .82rem; text-decoration: none; }
+.coffee:hover, .coffee:focus-visible { color: #d5ff72; text-decoration: underline; outline: none; }
 
 .shared-preview { width: min(100%, 680px); min-height: 100vh; margin: auto; padding: max(24px, env(safe-area-inset-top)) 24px max(30px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; justify-content: center; }
 .shared-preview[hidden] { display: none; }
