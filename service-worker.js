@@ -1,5 +1,5 @@
-const CACHE = 'big-text-display-v3';
-const APP_FILES = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './logo.svg'];
+const CACHE = 'big-text-display-v4';
+const APP_FILES = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './logoTx.svg'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(APP_FILES)).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(self.clients.claim()));
 self.addEventListener('fetch', event => {
