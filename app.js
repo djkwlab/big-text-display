@@ -1,4 +1,6 @@
 const message = document.querySelector('#message');
+const presetMessages = document.querySelector('#presetMessages');
+const presetMessageButtons = [...presetMessages.querySelectorAll('button')];
 const display = document.querySelector('#display');
 const displayText = document.querySelector('#displayText');
 const showButton = document.querySelector('#showButton');
@@ -19,6 +21,13 @@ const savedRgb = Array.isArray(state.customRgb) && state.customRgb.length === 3 
 rgbInputs.forEach((input, index) => { input.value = savedRgb[index]; });
 
 function currentColour() { return document.querySelector('[name="colour"]:checked').value; }
+function updatePresetMessages() {
+  presetMessageButtons.forEach(button => {
+    const selected = button.dataset.message === message.value;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', selected);
+  });
+}
 function customColour() { return `rgb(${rgbInputs.map(input => input.value).join(', ')})`; }
 function updateCustomColourControls() {
   const color = customColour();
@@ -64,7 +73,18 @@ function closeDisplay() {
   screen.orientation?.unlock?.();
 }
 
-message.addEventListener('input', updateDisplay);
+message.addEventListener('input', () => {
+  updatePresetMessages();
+  updateDisplay();
+});
+presetMessages.addEventListener('click', event => {
+  const button = event.target.closest('button[data-message]');
+  if (!button) return;
+  message.value = button.dataset.message;
+  updatePresetMessages();
+  updateDisplay();
+  message.focus();
+});
 document.querySelectorAll('[name="colour"], #invert').forEach(input => input.addEventListener('change', updateDisplay));
 rgbInputs.forEach(input => input.addEventListener('input', () => {
   document.querySelector('[value="custom"]').checked = true;
@@ -79,4 +99,5 @@ document.addEventListener('keydown', event => { if (event.key === 'Escape') clos
 window.addEventListener('beforeinstallprompt', event => { event.preventDefault(); installPrompt = event; installButton.hidden = false; });
 installButton.addEventListener('click', async () => { if (!installPrompt) return; installPrompt.prompt(); await installPrompt.userChoice; installPrompt = null; installButton.hidden = true; });
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
+updatePresetMessages();
 updateDisplay();
