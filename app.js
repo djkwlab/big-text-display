@@ -75,7 +75,12 @@ function updateDisplay() {
   fitText();
 }
 
-function fits() { return displayText.scrollWidth <= display.clientWidth && displayText.scrollHeight <= display.clientHeight; }
+function fits() {
+  const displayStyle = getComputedStyle(display);
+  const availableWidth = display.clientWidth - parseFloat(displayStyle.paddingLeft) - parseFloat(displayStyle.paddingRight);
+  const availableHeight = display.clientHeight - parseFloat(displayStyle.paddingTop) - parseFloat(displayStyle.paddingBottom);
+  return displayText.scrollWidth <= availableWidth && displayText.scrollHeight <= availableHeight;
+}
 function fitText() {
   if (!display.classList.contains('active')) return;
   let low = 2, high = Math.max(display.clientWidth, display.clientHeight), best = 2;
