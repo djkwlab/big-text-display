@@ -31,6 +31,18 @@
           <label><input type="radio" name="colour" value="green"><span class="swatch green"></span>Neon green</label>
           <label><input type="radio" name="colour" value="yellow"><span class="swatch yellow"></span>Yellow</label>
           <label><input type="radio" name="colour" value="red"><span class="swatch red"></span>Red</label>
+          <label><input type="radio" name="colour" value="custom"><span id="customSwatch" class="swatch custom"></span>Custom</label>
+        </fieldset>
+
+        <fieldset id="customColourControls" class="custom-colour" hidden>
+          <legend>Custom RGB colour</legend>
+          <div class="colour-preview" id="colourPreview" aria-hidden="true"></div>
+          <label for="red">Red <output id="redValue" for="red">255</output></label>
+          <input id="red" type="range" min="0" max="255" value="255">
+          <label for="green">Green <output id="greenValue" for="green">255</output></label>
+          <input id="green" type="range" min="0" max="255" value="255">
+          <label for="blue">Blue <output id="blueValue" for="blue">255</output></label>
+          <input id="blue" type="range" min="0" max="255" value="255">
         </fieldset>
 
         <label class="toggle"><input id="invert" type="checkbox"><span></span>Invert display</label>
