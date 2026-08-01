@@ -16,6 +16,7 @@ const editor = document.querySelector('.editor');
 const sharedPreview = document.querySelector('#sharedPreview');
 const sharedMessageText = document.querySelector('#sharedMessageText');
 const displaySharedButton = document.querySelector('#displaySharedButton');
+const writeSharedButton = document.querySelector('#writeSharedButton');
 let installPrompt;
 
 const colours = { white: '#ffffff', green: '#9dff00', yellow: '#ffe600', red: '#ff3131' };
@@ -125,6 +126,14 @@ shareButton.addEventListener('click', async () => {
   }
 });
 displaySharedButton.addEventListener('click', openDisplay);
+writeSharedButton.addEventListener('click', () => {
+  const editorUrl = new URL(window.location.href);
+  editorUrl.search = '';
+  window.history.replaceState(null, '', editorUrl);
+  sharedPreview.hidden = true;
+  editor.hidden = false;
+  message.focus();
+});
 display.addEventListener('click', closeDisplay);
 window.addEventListener('resize', fitText);
 document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) display.classList.remove('active'); });
