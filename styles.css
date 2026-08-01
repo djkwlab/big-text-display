@@ -45,7 +45,15 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #b8ff2c22; }
 .toggle span::after { display: block; width: 18px; height: 18px; content: ""; background: #ddd; border-radius: 50%; transition: .2s; }
 .toggle input:checked + span { background: var(--accent); }.toggle input:checked + span::after { transform: translateX(18px); background: #171717; }
 .show { display: block; width: 100%; margin-top: 28px; padding: 17px; color: #10100e; background: var(--accent); border: 0; border-radius: 14px; font-weight: 900; font-size: 1.05rem; }
+.share { display: block; width: 100%; margin-top: 10px; padding: 13px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 14px; font-weight: 800; font-size: .95rem; }
+.share:hover, .share:focus-visible { border-color: var(--ink); outline: none; }
+.share-status { min-height: 1.2em; margin: 8px 0 -8px; color: var(--muted); font-size: .8rem; text-align: center; }
 .hint { margin: 13px 0 0; color: var(--muted); font-size: .78rem; text-align: center; }
+
+.shared-preview { width: min(100%, 680px); min-height: 100vh; margin: auto; padding: max(24px, env(safe-area-inset-top)) 24px max(30px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; justify-content: center; }
+.shared-preview[hidden] { display: none; }
+.shared-message-text { margin: 12px 0 0; color: var(--ink); font-size: clamp(2.4rem, 14vw, 5.5rem); font-weight: 900; line-height: .95; letter-spacing: -.06em; overflow-wrap: anywhere; white-space: pre-wrap; }
+.shared-preview .show { margin-top: 36px; }
 
 .display { display: none; position: fixed; z-index: 5; inset: 0; padding: max(22px, env(safe-area-inset-top)) max(22px, env(safe-area-inset-right)) max(22px, env(safe-area-inset-bottom)) max(22px, env(safe-area-inset-left)); background: #000; color: white; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
 .display.active { display: flex; }
