@@ -54,8 +54,17 @@
         </fieldset>
 
         <label class="toggle"><input id="invert" type="checkbox"><span></span>Invert display</label>
-        <button id="showButton" class="show" type="button">Show full screen</button>
+        <button id="showButton" class="show" type="button">Display message</button>
+        <button id="shareButton" class="share" type="button">Share message</button>
+        <p id="shareStatus" class="share-status" aria-live="polite"></p>
         <p class="hint">Tap the display to return to editing.</p>
+      </section>
+
+      <section id="sharedPreview" class="shared-preview" aria-label="Shared message" hidden>
+        <p class="eyebrow">SHARED MESSAGE</p>
+        <p id="sharedMessageText" class="shared-message-text"></p>
+        <button id="displaySharedButton" class="show" type="button">Display message</button>
+        <button id="writeSharedButton" class="share" type="button">Write message</button>
       </section>
 
       <section id="display" class="display" aria-label="Full-screen text display" tabindex="0">
