@@ -17,6 +17,10 @@ h1 { font-size: clamp(2rem, 8vw, 3.5rem); letter-spacing: -.06em; line-height: .
 button { font: inherit; cursor: pointer; }
 .install { color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 99px; padding: .55rem .8rem; font-size: .85rem; }
 .input-label, legend { display: block; color: var(--muted); font-size: .82rem; font-weight: 700; letter-spacing: .04em; margin-bottom: 8px; }
+.preset-messages { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.preset-messages button { color: var(--muted); background: var(--panel); border: 1px solid var(--line); border-radius: 99px; padding: 8px 12px; font-size: .9rem; }
+.preset-messages button:hover, .preset-messages button:focus-visible { color: var(--ink); border-color: var(--ink); outline: none; }
+.preset-messages button.selected { color: #10100e; background: var(--accent); border-color: var(--accent); }
 textarea { width: 100%; resize: vertical; min-height: 120px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; font: 600 1.1rem/1.4 inherit; outline: none; }
 textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #b8ff2c22; }
 .swatches { display: flex; flex-wrap: wrap; gap: 9px; border: 0; padding: 0; margin: 24px 0; }
