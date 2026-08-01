@@ -4,6 +4,10 @@ const displayText = document.querySelector('#displayText');
 const showButton = document.querySelector('#showButton');
 const invert = document.querySelector('#invert');
 const installButton = document.querySelector('#installButton');
+const customColourControls = document.querySelector('#customColourControls');
+const colourPreview = document.querySelector('#colourPreview');
+const customSwatch = document.querySelector('#customSwatch');
+const rgbInputs = ['red', 'green', 'blue'].map(id => document.querySelector(`#${id}`));
 let installPrompt;
 
 const colours = { white: '#ffffff', green: '#9dff00', yellow: '#ffe600', red: '#ff3131' };
@@ -11,11 +15,22 @@ const state = JSON.parse(localStorage.getItem('big-text-state') || '{}');
 message.value = state.message || '';
 invert.checked = Boolean(state.invert);
 (document.querySelector(`[name="colour"][value="${state.colour || 'white'}"]`) || document.querySelector('[value="white"]')).checked = true;
+const savedRgb = Array.isArray(state.customRgb) && state.customRgb.length === 3 ? state.customRgb : [255, 255, 255];
+rgbInputs.forEach((input, index) => { input.value = savedRgb[index]; });
 
 function currentColour() { return document.querySelector('[name="colour"]:checked').value; }
-function save() { localStorage.setItem('big-text-state', JSON.stringify({ message: message.value, colour: currentColour(), invert: invert.checked })); }
+function customColour() { return `rgb(${rgbInputs.map(input => input.value).join(', ')})`; }
+function updateCustomColourControls() {
+  const color = customColour();
+  customColourControls.hidden = currentColour() !== 'custom';
+  colourPreview.style.backgroundColor = color;
+  customSwatch.style.backgroundColor = color;
+  rgbInputs.forEach(input => { document.querySelector(`#${input.id}Value`).value = input.value; });
+}
+function save() { localStorage.setItem('big-text-state', JSON.stringify({ message: message.value, colour: currentColour(), customRgb: rgbInputs.map(input => Number(input.value)), invert: invert.checked })); }
 function updateDisplay() {
-  const color = colours[currentColour()];
+  updateCustomColourControls();
+  const color = currentColour() === 'custom' ? customColour() : colours[currentColour()];
   displayText.textContent = message.value || 'Type a message to begin';
   display.style.color = invert.checked ? '#000000' : color;
   display.style.backgroundColor = invert.checked ? color : '#000000';
@@ -51,6 +66,10 @@ function closeDisplay() {
 
 message.addEventListener('input', updateDisplay);
 document.querySelectorAll('[name="colour"], #invert').forEach(input => input.addEventListener('change', updateDisplay));
+rgbInputs.forEach(input => input.addEventListener('input', () => {
+  document.querySelector('[value="custom"]').checked = true;
+  updateDisplay();
+}));
 showButton.addEventListener('click', openDisplay);
 display.addEventListener('click', closeDisplay);
 window.addEventListener('resize', fitText);
