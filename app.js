@@ -4,17 +4,24 @@ const presetMessageButtons = [...presetMessages.querySelectorAll('button')];
 const display = document.querySelector('#display');
 const displayText = document.querySelector('#displayText');
 const showButton = document.querySelector('#showButton');
+const shareButton = document.querySelector('#shareButton');
+const shareStatus = document.querySelector('#shareStatus');
 const invert = document.querySelector('#invert');
 const installButton = document.querySelector('#installButton');
 const customColourControls = document.querySelector('#customColourControls');
 const colourPreview = document.querySelector('#colourPreview');
 const customSwatch = document.querySelector('#customSwatch');
 const rgbInputs = ['red', 'green', 'blue'].map(id => document.querySelector(`#${id}`));
+const editor = document.querySelector('.editor');
+const sharedPreview = document.querySelector('#sharedPreview');
+const sharedMessageText = document.querySelector('#sharedMessageText');
+const displaySharedButton = document.querySelector('#displaySharedButton');
 let installPrompt;
 
 const colours = { white: '#ffffff', green: '#9dff00', yellow: '#ffe600', red: '#ff3131' };
 const state = JSON.parse(localStorage.getItem('big-text-state') || '{}');
-message.value = state.message || '';
+const sharedMessage = new URLSearchParams(window.location.search).get('message');
+message.value = sharedMessage ?? (state.message || '');
 invert.checked = Boolean(state.invert);
 (document.querySelector(`[name="colour"][value="${state.colour || 'white'}"]`) || document.querySelector('[value="white"]')).checked = true;
 const savedRgb = Array.isArray(state.customRgb) && state.customRgb.length === 3 ? state.customRgb : [255, 255, 255];
@@ -91,6 +98,33 @@ rgbInputs.forEach(input => input.addEventListener('input', () => {
   updateDisplay();
 }));
 showButton.addEventListener('click', openDisplay);
+shareButton.addEventListener('click', async () => {
+  if (!message.value.trim()) {
+    message.focus();
+    shareStatus.textContent = 'Enter a message to share.';
+    return;
+  }
+
+  const shareUrl = new URL(window.location.href);
+  shareUrl.search = '';
+  shareUrl.searchParams.set('message', message.value);
+  const shareData = { title: 'Big Text message', text: message.value, url: shareUrl.toString() };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+      shareStatus.textContent = 'Message shared.';
+    } else if (navigator.clipboard) {
+      await navigator.clipboard.writeText(shareUrl.toString());
+      shareStatus.textContent = 'Share link copied.';
+    } else {
+      shareStatus.textContent = 'Sharing is not supported in this browser.';
+    }
+  } catch (error) {
+    if (error.name !== 'AbortError') shareStatus.textContent = 'Unable to share the message.';
+  }
+});
+displaySharedButton.addEventListener('click', openDisplay);
 display.addEventListener('click', closeDisplay);
 window.addEventListener('resize', fitText);
 document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) display.classList.remove('active'); });
@@ -101,3 +135,8 @@ installButton.addEventListener('click', async () => { if (!installPrompt) return
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
 updatePresetMessages();
 updateDisplay();
+if (sharedMessage) {
+  editor.hidden = true;
+  sharedPreview.hidden = false;
+  sharedMessageText.textContent = sharedMessage;
+}
